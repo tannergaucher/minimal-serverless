@@ -1,6 +1,7 @@
 const { User } = require('../models')
 const connectToDb = require('../connect-to-db')
 const { hashSync, genSaltSync } = require('bcryptjs')
+const { sign } = require('jsonwebtoken')
 
 export async function handler(event, context) {
   context.callbackWaitsForEmptyEventLoop = false
@@ -17,11 +18,14 @@ export async function handler(event, context) {
       password: hashedPassword,
     })
 
+    const token = sign({ userId: user.id }, process.env.REACT_APP_APP_SECRET)
+
     return {
       statusCode: 200,
       body: JSON.stringify({
         data: {
           user,
+          token,
         },
       }),
     }

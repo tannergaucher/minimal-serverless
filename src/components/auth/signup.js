@@ -20,8 +20,14 @@ export default function Signup() {
             }),
           })
 
-          const { data } = await res.json()
-          console.log(data)
+          if (res.ok) {
+            // TODO: HANDLE RES.OK
+            const { data } = await res.json()
+            // TODO: set data.user to user context
+            localStorage.setItem('token', data.token)
+          }
+          setEmail('')
+          setPassword('')
         } catch (error) {
           console.log(error)
         }

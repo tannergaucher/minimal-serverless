@@ -6,9 +6,31 @@ export default function Login() {
 
   return (
     <form
-      onSubmit={e => {
+      onSubmit={async e => {
         e.preventDefault()
-        //do fetch /.netlify/functions/login
+        try {
+          const res = await fetch(`/.netlify/functions/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email,
+              password,
+            }),
+          })
+
+          if (res.ok) {
+            const { data } = await res.json()
+            console.log(data)
+            // set data.user to user context
+            localStorage.setItem('token', data.token)
+          }
+          setEmail('')
+          setPassword('')
+        } catch (error) {
+          console.log(error)
+        }
       }}
     >
       <input
