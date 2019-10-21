@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
+
+import { IsAuthContext } from '../context'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { setIsAuth } = useContext(IsAuthContext)
+  const history = useHistory()
 
   return (
     <form
@@ -23,11 +28,11 @@ export default function Login() {
           if (res.ok) {
             const { data } = await res.json()
             console.log(data)
-            // set data.user to user context
             localStorage.setItem('token', data.token)
+            // set data.user to user context
+            setIsAuth(true)
+            history.push(`/`)
           }
-          setEmail('')
-          setPassword('')
         } catch (error) {
           console.log(error)
         }
