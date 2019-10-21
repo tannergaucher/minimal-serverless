@@ -1,5 +1,6 @@
 const { User } = require('../models')
 const connectToDb = require('../connect-to-db')
+const { hash } = require('bcrypt')
 
 export async function handler(event, context) {
   context.callbackWaitsForEmptyEventLoop = false
@@ -7,10 +8,12 @@ export async function handler(event, context) {
   try {
     connectToDb()
     const req = JSON.parse(event.body)
+    const hashedPassword = await hash(req.password, 10)
+    const lowercaseEmail = req.email.toLowerCase()
 
     const user = await User.create({
-      email: req.email,
-      password: req.password,
+      email: lowercaseEmail,
+      password: hashedPassword,
     })
 
     return {
