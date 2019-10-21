@@ -15,7 +15,7 @@ export default function Login() {
 
   return (
     <fieldset disabled={loading}>
-      {error && `${error.message}`}
+      {error && `Error! ${error.message}`}
       <form
         onSubmit={async e => {
           e.preventDefault()
@@ -37,9 +37,17 @@ export default function Login() {
               setUser(data.user)
               setIsAuth(true)
               history.push(`/`)
+            } else {
+              // 400 CLIENT SIDE ERROR
+              const { error } = await res.json()
+              setError(error)
+              setPassword('')
             }
           } catch (error) {
+            // 500 SERVER ERROR
+            console.log(error)
             setError(error)
+            setPassword('')
           }
         }}
       >
