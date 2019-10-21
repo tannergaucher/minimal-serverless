@@ -12,21 +12,27 @@ export default function App() {
       <form
         onSubmit={async e => {
           e.preventDefault()
+          try {
+            const res = await fetch(`/.netlify/functions/signup`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email,
+                password,
+              }),
+            })
 
-          const res = await fetch(`/.netlify/functions/signup`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              password,
-            }),
-          })
-
-          const { data } = await res.json()
-
-          console.log(data)
+            if (res.ok) {
+              const { data } = await res.json()
+              console.log(data)
+            } else {
+              throw new Error(`Network response not ok`)
+            }
+          } catch (error) {
+            console.log(error)
+          }
         }}
       >
         <input

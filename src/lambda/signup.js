@@ -12,6 +12,8 @@ export async function handler(event, context) {
       password: req.password,
     })
 
+    console.log(user)
+
     return {
       statusCode: 200,
       body: JSON.stringify({
