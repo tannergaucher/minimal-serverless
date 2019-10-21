@@ -5,11 +5,14 @@ import { App } from './components/elements'
 import * as serviceWorker from './serviceWorker'
 
 import UserProvider from './components/context/user-context'
+import IsAuthContextProvider from './components/context/is-auth-context'
 
 ReactDOM.render(
-  <UserProvider>
-    <App />
-  </UserProvider>,
+  <IsAuthContextProvider>
+    <UserProvider>
+      <App />
+    </UserProvider>
+  </IsAuthContextProvider>,
   document.getElementById('root')
 )
 
