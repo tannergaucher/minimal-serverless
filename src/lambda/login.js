@@ -10,9 +10,21 @@ export async function handler(event, context) {
     connectToDb()
     const req = JSON.parse(event.body)
     const lowercaseEmail = req.email.toLowerCase()
+
     const [user] = await User.find({
       email: lowercaseEmail,
     })
+
+    if (!user) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          error: {
+            message: `No user found for that email`,
+          },
+        }),
+      }
+    }
 
     const validPassword = compareSync(req.password, user.password)
 
@@ -38,11 +50,15 @@ export async function handler(event, context) {
         },
       }),
     }
-  } catch (err) {
-    console.log(err)
+  } catch (error) {
+    console.log(error)
     return {
       statusCode: 500,
-      body: JSON.stringify({ msg: err.message }),
+      body: JSON.stringify({
+        error: {
+          message: `Oops, something went wrong`,
+        },
+      }),
     }
   }
 }
