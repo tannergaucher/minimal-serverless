@@ -7,6 +7,7 @@ export async function handler(event, context) {
   try {
     connectToDb()
     const req = JSON.parse(event.body)
+
     const user = await User.create({
       email: req.email,
       password: req.password,
