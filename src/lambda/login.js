@@ -10,7 +10,6 @@ export async function handler(event, context) {
     connectToDb()
     const req = JSON.parse(event.body)
     const lowercaseEmail = req.email.toLowerCase()
-
     const [user] = await User.find({
       email: lowercaseEmail,
     })
