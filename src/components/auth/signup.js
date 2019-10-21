@@ -22,6 +22,7 @@ export default function Signup() {
 
           const { data } = await res.json()
           console.log(data)
+          localStorage.setItem('token', data.token)
         } catch (error) {
           console.log(error)
         }
