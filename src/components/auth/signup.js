@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+
+import { IsAuthContext, UserContext } from '../context'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { setIsAuth } = useContext(IsAuthContext)
+  const { setUser } = useContext(UserContext)
 
   return (
     <form
@@ -21,14 +25,15 @@ export default function Signup() {
           })
 
           if (res.ok) {
-            // TODO: HANDLE RES.OK
             const { data } = await res.json()
-            // TODO: set data.user to user context
+            setIsAuth(true)
+            setUser(data.user)
             localStorage.setItem('token', data.token)
           }
           setEmail('')
           setPassword('')
         } catch (error) {
+          // TODO HANDLE ERROR
           console.log(error)
         }
       }}
