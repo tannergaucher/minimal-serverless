@@ -1,12 +1,13 @@
 import React from 'react'
 
 import { Login } from '../auth'
+import { StyledPage } from '../styles'
 
 export default function LoginPage() {
   return (
-    <div>
+    <StyledPage>
       <h1>Login Page</h1>
       <Login />
-    </div>
+    </StyledPage>
   )
 }

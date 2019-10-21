@@ -1,9 +1,11 @@
 import React from 'react'
 
+import { StyledPage } from '../styles'
+
 export default function IndexPage() {
   return (
-    <div>
+    <StyledPage>
       <h1>Index Page</h1>
-    </div>
+    </StyledPage>
   )
 }
