@@ -28,8 +28,9 @@ export default function MyUserContext({ children }) {
           const { data } = await res.json()
           console.log(data)
           //   set user here
-          setLoading(false)
         }
+
+        setLoading(false)
       } catch (error) {
         setError(error)
         setLoading(false)
