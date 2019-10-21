@@ -4,11 +4,17 @@ import { StyledPage } from '../styles'
 import { UserContext } from '../context'
 
 export default function IndexPage() {
-  const { user } = useContext(UserContext)
+  const { loading, error, user } = useContext(UserContext)
+
+  console.log(loading)
+  console.log(error)
+  console.log(user)
 
   return (
     <StyledPage>
       <h1>Index Page</h1>
+      {loading && `Loading user...`}
+      {error && `Error: ${error.message}`}
       {user ? `${user.email}` : `No authed user`}
     </StyledPage>
   )

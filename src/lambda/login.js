@@ -10,9 +10,13 @@ export async function handler(event, context) {
 
     const req = JSON.parse(event.body)
     const lowercaseEmail = req.email.toLowerCase()
+
     const [user] = await User.find({
       email: lowercaseEmail,
     })
+
+    // TODO: Check password!
+
     const token = sign({ userId: user.id }, process.env.REACT_APP_APP_SECRET)
 
     return {
