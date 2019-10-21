@@ -1,6 +1,6 @@
 const { User } = require('../models')
 const connectToDb = require('../connect-to-db')
-const { hash } = require('bcrypt')
+const { hashSync, genSaltSync } = require('bcryptjs')
 
 export async function handler(event, context) {
   context.callbackWaitsForEmptyEventLoop = false
@@ -8,8 +8,9 @@ export async function handler(event, context) {
   try {
     connectToDb()
     const req = JSON.parse(event.body)
-    const hashedPassword = await hash(req.password, 10)
     const lowercaseEmail = req.email.toLowerCase()
+    const salt = genSaltSync(10)
+    const hashedPassword = hashSync(req.password, salt)
 
     const user = await User.create({
       email: lowercaseEmail,
