@@ -20,35 +20,30 @@ export default function Signup() {
       <form
         onSubmit={async e => {
           e.preventDefault()
-          try {
-            setLoading(true)
-            const res = await fetch(`/.netlify/functions/signup`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email,
-                password,
-              }),
-            })
 
-            if (res.ok) {
-              const { data } = await res.json()
-              localStorage.setItem('token', data.token)
-              setIsAuth(true)
-              setLoading(false)
-              setUser(data)
-              history.push(`/`)
-            } else {
-              const { error } = await res.json()
-              console.log('ELSE')
-              console.log(error)
-              setError(error)
-            }
-          } catch (error) {
-            console.log('CATCH!')
+          setLoading(true)
+          const res = await fetch(`/.netlify/functions/signup`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email,
+              password,
+            }),
+          })
+
+          if (res.ok) {
+            const { data } = await res.json()
+            localStorage.setItem('token', data.token)
+            setIsAuth(true)
+            setLoading(false)
+            setUser(data)
+            history.push(`/`)
+          } else {
+            const { error } = await res.json()
             setError(error)
+            setLoading(false)
           }
         }}
       >

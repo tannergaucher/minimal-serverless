@@ -42,6 +42,7 @@ export default function Login() {
             const { error } = await res.json()
             setError(error)
             setPassword('')
+            setLoading(false)
           }
         }}
       >
