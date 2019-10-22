@@ -38,7 +38,7 @@ export default function Signup() {
               localStorage.setItem('token', data.token)
               setIsAuth(true)
               setLoading(false)
-              setUser(data.user)
+              setUser(data)
               history.push(`/`)
             } else {
               const { error } = await res.json()

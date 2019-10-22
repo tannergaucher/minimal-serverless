@@ -35,7 +35,7 @@ export default function Login() {
             if (res.ok) {
               const { data } = await res.json()
               localStorage.setItem('token', data.token)
-              setUser(data.user)
+              setUser(data)
               setLoading(false)
               setIsAuth(true)
               history.push(`/`)
