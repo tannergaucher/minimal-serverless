@@ -1,39 +1,59 @@
 const { User } = require('../models')
-const mongoose = require('mongoose')
+const connectToDb = require('../connect-to-db')
+const { hashSync, genSaltSync } = require('bcryptjs')
+const { sign } = require('jsonwebtoken')
 
 export async function handler(event, context) {
   context.callbackWaitsForEmptyEventLoop = false
 
   try {
-    const dbOptions = {
-      useNewUrlParser: true,
-      useFindAndModify: false,
-    }
-
-    mongoose.connect(process.env.REACT_APP_DB_URL, dbOptions)
-
+    connectToDb()
     const req = JSON.parse(event.body)
+    const lowercaseEmail = req.email.toLowerCase()
+    const salt = genSaltSync(10)
+    const hashedPassword = hashSync(req.password, salt)
 
-    const user = await User.create({
-      email: req.email,
-      password: req.password,
+    const [existingUser] = await User.find({
+      email: req.email.toLowerCase(),
     })
 
-    console.log(user)
+    if (existingUser) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          error: {
+            message: `That email address already exists.`,
+          },
+        }),
+      }
+    }
+
+    const user = await User.create({
+      email: lowercaseEmail,
+      password: hashedPassword,
+    })
+
+    const token = sign({ userId: user.id }, process.env.REACT_APP_APP_SECRET)
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         data: {
           user,
+          token,
         },
       }),
     }
-  } catch (err) {
-    console.log(err)
+  } catch (error) {
+    console.log(error)
+
     return {
       statusCode: 500,
-      body: JSON.stringify({ msg: err.message }),
+      body: JSON.stringify({
+        error: {
+          message: `Opps. Something went wrong.`,
+        },
+      }),
     }
   }
 }
