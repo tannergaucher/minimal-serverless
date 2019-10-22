@@ -13,6 +13,21 @@ export async function handler(event, context) {
     const salt = genSaltSync(10)
     const hashedPassword = hashSync(req.password, salt)
 
+    const [existingUser] = await User.find({
+      email: req.email.toLowerCase(),
+    })
+
+    if (existingUser) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          error: {
+            message: `That email address already exists.`,
+          },
+        }),
+      }
+    }
+
     const user = await User.create({
       email: lowercaseEmail,
       password: hashedPassword,
@@ -29,11 +44,16 @@ export async function handler(event, context) {
         },
       }),
     }
-  } catch (err) {
-    console.log(err)
+  } catch (error) {
+    console.log(error)
+
     return {
       statusCode: 500,
-      body: JSON.stringify({ msg: err.message }),
+      body: JSON.stringify({
+        error: {
+          message: `Opps. Something went wrong.`,
+        },
+      }),
     }
   }
 }

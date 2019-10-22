@@ -12,8 +12,6 @@ exports.handler = async (event, context) => {
     const { userId } = verifiedToken
     const user = await User.findById(userId)
 
-    console.log(user)
-
     return {
       statusCode: 200,
       body: JSON.stringify({
