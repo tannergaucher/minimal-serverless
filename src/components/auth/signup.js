@@ -20,7 +20,6 @@ export default function Signup() {
       <form
         onSubmit={async e => {
           e.preventDefault()
-
           setLoading(true)
           const res = await fetch(`/.netlify/functions/signup`, {
             method: 'POST',
