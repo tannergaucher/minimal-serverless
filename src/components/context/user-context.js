@@ -3,7 +3,7 @@ import React, { useState, createContext, useLayoutEffect } from 'react'
 export const UserContext = createContext()
 
 export default function MyUserContext({ children }) {
-  const [user, setUser] = useState(null)
+  const [data, setUser] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -26,8 +26,7 @@ export default function MyUserContext({ children }) {
 
         if (res.ok) {
           const { data } = await res.json()
-
-          setUser(data.user)
+          setUser(data)
         }
 
         setLoading(false)
@@ -39,7 +38,7 @@ export default function MyUserContext({ children }) {
   }, [])
 
   return (
-    <UserContext.Provider value={{ user, setUser, loading, error }}>
+    <UserContext.Provider value={{ data, setUser, loading, error }}>
       {children}
     </UserContext.Provider>
   )
