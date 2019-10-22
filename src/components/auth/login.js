@@ -20,6 +20,7 @@ export default function Login() {
         onSubmit={async e => {
           e.preventDefault()
           try {
+            setLoading(true)
             const res = await fetch(`/.netlify/functions/login`, {
               method: 'POST',
               headers: {
@@ -35,6 +36,7 @@ export default function Login() {
               const { data } = await res.json()
               localStorage.setItem('token', data.token)
               setUser(data.user)
+              setLoading(false)
               setIsAuth(true)
               history.push(`/`)
             } else {
