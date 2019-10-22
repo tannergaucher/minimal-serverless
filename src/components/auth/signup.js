@@ -43,6 +43,7 @@ export default function Signup() {
             const { error } = await res.json()
             setError(error)
             setLoading(false)
+            setPassword('')
           }
         }}
       >
