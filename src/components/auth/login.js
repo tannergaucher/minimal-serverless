@@ -19,35 +19,27 @@ export default function Login() {
       <form
         onSubmit={async e => {
           e.preventDefault()
-          try {
-            setLoading(true)
-            const res = await fetch(`/.netlify/functions/login`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email,
-                password,
-              }),
-            })
+          setLoading(true)
+          const res = await fetch(`/.netlify/functions/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email,
+              password,
+            }),
+          })
 
-            if (res.ok) {
-              const { data } = await res.json()
-              localStorage.setItem('token', data.token)
-              setUser(data)
-              setLoading(false)
-              setIsAuth(true)
-              history.push(`/`)
-            } else {
-              // 400 CLIENT SIDE ERROR
-              const { error } = await res.json()
-              setError(error)
-              setPassword('')
-            }
-          } catch (error) {
-            // 500 SERVER ERROR
-            console.log(error)
+          if (res.ok) {
+            const { data } = await res.json()
+            localStorage.setItem('token', data.token)
+            setUser(data)
+            setLoading(false)
+            setIsAuth(true)
+            history.push(`/`)
+          } else {
+            const { error } = await res.json()
             setError(error)
             setPassword('')
           }
