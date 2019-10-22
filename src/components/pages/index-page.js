@@ -6,10 +6,6 @@ import { UserContext } from '../context'
 export default function IndexPage() {
   const { loading, error, user } = useContext(UserContext)
 
-  console.log(loading)
-  console.log(error)
-  console.log(user)
-
   return (
     <StyledPage>
       <h1>Index Page</h1>

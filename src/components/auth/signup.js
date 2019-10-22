@@ -7,6 +7,8 @@ export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
   const { setIsAuth } = useContext(IsAuthContext)
   const { setUser } = useContext(UserContext)
 
@@ -14,6 +16,7 @@ export default function Signup() {
 
   return (
     <fieldset disabled={loading}>
+      {error && `Error: ${error.message}`}
       <form
         onSubmit={async e => {
           e.preventDefault()
@@ -37,10 +40,15 @@ export default function Signup() {
               setLoading(false)
               setUser(data.user)
               history.push(`/`)
+            } else {
+              const { error } = await res.json()
+              console.log('ELSE')
+              console.log(error)
+              setError(error)
             }
           } catch (error) {
-            // TODO HANDLE ERROR
-            console.log(error)
+            console.log('CATCH!')
+            setError(error)
           }
         }}
       >

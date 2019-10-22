@@ -26,7 +26,7 @@ export default function MyUserContext({ children }) {
 
         if (res.ok) {
           const { data } = await res.json()
-          console.log(data)
+
           setUser(data.user)
         }
 
