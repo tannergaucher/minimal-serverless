@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Logout } from '../auth'
 import { IsAuthContext } from '../context'
+import { Link } from '../styles'
 
 const StyledHeader = styled.header`
   margin: 0.5rem 1rem;
@@ -17,7 +17,7 @@ export default function Header() {
   return (
     <StyledHeader>
       <Link to="/">
-        <h3>CRA Lambda Demo</h3>
+        <h3>Minimal Serverless App</h3>
       </Link>
       {isAuth ? <Logout /> : <AuthLinks />}
     </StyledHeader>
