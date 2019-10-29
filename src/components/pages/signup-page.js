@@ -6,7 +6,7 @@ import { StyledPage } from '../styles'
 export default function SignupPage() {
   return (
     <StyledPage>
-      <h1>Signup Page</h1>
+      <h1>Sign up for an account</h1>
       <Signup />
     </StyledPage>
   )

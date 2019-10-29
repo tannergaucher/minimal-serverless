@@ -6,7 +6,7 @@ import { StyledPage } from '../styles'
 export default function LoginPage() {
   return (
     <StyledPage>
-      <h1>Login Page</h1>
+      <h1>Log in to your account</h1>
       <Login />
     </StyledPage>
   )
