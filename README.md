@@ -53,7 +53,7 @@ This should build the react app and the lambda functions, serving both the clien
 
 The functions enpoints are available as `/.netlify/functions/FILE_NAME`, so we can test the `hello.js` function by going to `http://localhost:8888/.netlify/functions/hello`
 
-#### Deploy Project to netlify
+#### Deploy project to production
 
 TODO
 
