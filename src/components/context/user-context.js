@@ -13,24 +13,21 @@ export default function MyUserContext({ children }) {
     token ? fetchUser(token) : setLoading(false)
 
     async function fetchUser(token) {
-      try {
-        const res = await fetch(`/.netlify/functions/get-user`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            token,
-          }),
-        })
+      const res = await fetch(`/.netlify/functions/get-user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token,
+        }),
+      })
 
-        if (res.ok) {
-          const { data } = await res.json()
-          setUser(data)
-        }
-
+      if (res.ok) {
+        const { data } = await res.json()
+        setUser(data)
+      } else {
         setLoading(false)
-      } catch (error) {
         setError(error)
         setLoading(false)
       }
@@ -38,7 +35,7 @@ export default function MyUserContext({ children }) {
   }, [])
 
   return (
-    <UserContext.Provider value={{ data, setUser, loading, error }}>
+    <UserContext.Provider value={{ data, loading, error, setUser }}>
       {children}
     </UserContext.Provider>
   )

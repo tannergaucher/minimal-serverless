@@ -12,42 +12,41 @@ export default function Signup() {
 
   const { setIsAuth } = useContext(IsAuthContext)
   const { setUser } = useContext(UserContext)
-
   const history = useHistory()
+
+  async function postSignup(e) {
+    e.preventDefault()
+    setLoading(true)
+    const res = await fetch(`/.netlify/functions/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+
+    if (res.ok) {
+      const { data } = await res.json()
+      localStorage.setItem('token', data.token)
+      setIsAuth(true)
+      setUser(data)
+      setLoading(false)
+      history.push(`/`)
+    } else {
+      const { error } = await res.json()
+      setError(error)
+      setLoading(false)
+      setPassword('')
+    }
+  }
 
   return (
     <Fieldset disabled={loading}>
       {error && `Error: ${error.message}`}
-      <Form
-        onSubmit={async e => {
-          e.preventDefault()
-          setLoading(true)
-          const res = await fetch(`/.netlify/functions/signup`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              password,
-            }),
-          })
-
-          if (res.ok) {
-            const { data } = await res.json()
-            localStorage.setItem('token', data.token)
-            setIsAuth(true)
-            setLoading(false)
-            setUser(data)
-            history.push(`/`)
-          } else {
-            const { error } = await res.json()
-            setError(error)
-            setLoading(false)
-            setPassword('')
-          }
-        }}
-      >
+      <Form onSubmit={e => postSignup(e)}>
         <Input
           type="email"
           placeholder="email"
@@ -55,7 +54,6 @@ export default function Signup() {
           onChange={e => setEmail(e.target.value)}
           required
         />
-
         <Input
           type="password"
           placeholder="password"
@@ -63,7 +61,6 @@ export default function Signup() {
           onChange={e => setPassword(e.target.value)}
           required
         />
-
         <Button type="submit">Sign Up</Button>
       </Form>
     </Fieldset>

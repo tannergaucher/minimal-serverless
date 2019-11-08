@@ -14,39 +14,40 @@ export default function Login() {
   const { setUser } = useContext(UserContext)
   const history = useHistory()
 
+  async function postLogin(e) {
+    e.preventDefault()
+    setLoading(true)
+
+    const res = await fetch(`/.netlify/functions/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+
+    if (res.ok) {
+      const { data } = await res.json()
+      localStorage.setItem('token', data.token)
+      setUser(data)
+      setIsAuth(true)
+      setLoading(false)
+      history.push(`/`)
+    } else {
+      const { error } = await res.json()
+      setError(error)
+      setPassword('')
+      setLoading(false)
+    }
+  }
+
   return (
     <Fieldset disabled={loading}>
       {error && `Error! ${error.message}`}
-      <Form
-        onSubmit={async e => {
-          e.preventDefault()
-          setLoading(true)
-          const res = await fetch(`/.netlify/functions/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              password,
-            }),
-          })
-
-          if (res.ok) {
-            const { data } = await res.json()
-            localStorage.setItem('token', data.token)
-            setUser(data)
-            setLoading(false)
-            setIsAuth(true)
-            history.push(`/`)
-          } else {
-            const { error } = await res.json()
-            setError(error)
-            setPassword('')
-            setLoading(false)
-          }
-        }}
-      >
+      <Form onSubmit={e => postLogin(e)}>
         <Input
           type="email"
           placeholder="Email"
@@ -54,7 +55,6 @@ export default function Login() {
           onChange={e => setEmail(e.target.value)}
           required
         />
-
         <Input
           type="password"
           placeholder="Password"
